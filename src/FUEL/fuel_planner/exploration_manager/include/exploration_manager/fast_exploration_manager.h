@@ -5,7 +5,8 @@
 #include <Eigen/Eigen>
 #include <memory>
 #include <vector>
-
+#include <geometry_msgs/Point.h>
+#include <geometry_msgs/PointStamped.h>
 using Eigen::Vector3d;
 using std::shared_ptr;
 using std::unique_ptr;
@@ -40,7 +41,11 @@ public:
   shared_ptr<FastPlannerManager> planner_manager_;
   shared_ptr<FrontierFinder> frontier_finder_;
   // unique_ptr<ViewFinder> view_finder_;
-
+  ros::Publisher endpose_pub_;
+  ros::Publisher cmu_pose_pub_;
+  geometry_msgs::Point end_pose;
+  geometry_msgs::PointStamped cmu_pose;
+  bool cmu_exploration;
 private:
   shared_ptr<EDTEnvironment> edt_environment_;
   shared_ptr<SDFMap> sdf_map_;

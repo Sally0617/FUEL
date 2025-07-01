@@ -18,7 +18,8 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <visualization_msgs/Marker.h>
-
+#include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/Point.h>
 using namespace Eigen;
 
 namespace fast_planner {
@@ -57,7 +58,9 @@ void FastExplorationManager::initialize(ros::NodeHandle& nh) {
   nh.param("exploration/yd", ViewNode::yd_, -1.0);
   nh.param("exploration/ydd", ViewNode::ydd_, -1.0);
   nh.param("exploration/w_dir", ViewNode::w_dir_, -1.0);
-
+  nh.param("cmu_exploration", cmu_exploration, false);
+  endpose_pub_ = nh.advertise<geometry_msgs::Point>("/chen/plan_pose", 10);
+  cmu_pose_pub_ = nh.advertise<geometry_msgs::PointStamped>("/way_point", 10);
   ViewNode::astar_.reset(new Astar);
   ViewNode::astar_->init(nh, edt_environment_);
   ViewNode::map_ = sdf_map_;
@@ -184,7 +187,6 @@ int FastExplorationManager::planExploreMotion(
     }
   } else if (ed_->points_.size() == 1) {
     // Only 1 destination, no need to find global tour through TSP
-    frontier_finder_->updateFrontierCostMatrix();
     ed_->global_tour_ = { pos, ed_->points_[0] };
     ed_->refined_tour_.clear();
     ed_->refined_views1_.clear();
@@ -221,8 +223,7 @@ int FastExplorationManager::planExploreMotion(
   } else
     ROS_ERROR("Empty destination.");
 
-  std::cout << "Next view: " << next_pos.transpose() << ", " << next_yaw << std::endl;
-
+  std::cout << "Next view: " << next_pos.transpose() << ", " << "next_yaw:" << next_yaw << std::endl;
   // Plan trajectory (position and yaw) to the next viewpoint
   t1 = ros::Time::now();
 

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(exploration_manager)
 
 set(CMAKE_BUILD_TYPE "Release")
-set(CMAKE_CXX_FLAGS "-std=c++11")
+#set(CMAKE_CXX_FLAGS "-std=c++11")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall")
 
@@ -23,6 +23,8 @@ find_package(catkin REQUIRED COMPONENTS
   lkh_tsp_solver
   plan_manage
   cv_bridge
+  tf
+  tf2
 )
 
 catkin_package(
@@ -48,6 +50,7 @@ add_executable(exploration_node
   )
 target_link_libraries(exploration_node 
   ${catkin_LIBRARIES}
+  # -ldw
   )
 
 # add_library(exploration_manager
@@ -62,6 +65,10 @@ target_link_libraries(write_tsp
   ${catkin_LIBRARIES} 
 )
 
+add_executable(fuel_nav src/fuel_nav.cpp)
+target_link_libraries(fuel_nav
+  ${catkin_LIBRARIES} 
+)
 
 add_executable(load_obj test/load_obj.cpp)
 target_link_libraries(load_obj

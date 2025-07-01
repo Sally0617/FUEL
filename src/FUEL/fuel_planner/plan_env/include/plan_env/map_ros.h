@@ -32,9 +32,9 @@ public:
 
 private:
   void depthPoseCallback(const sensor_msgs::ImageConstPtr& img,
-                         const geometry_msgs::PoseStampedConstPtr& pose);
+                         const nav_msgs::OdometryConstPtr& pose);
   void cloudPoseCallback(const sensor_msgs::PointCloud2ConstPtr& msg,
-                         const geometry_msgs::PoseStampedConstPtr& pose);
+                         const nav_msgs::OdometryConstPtr& pose);
   void updateESDFCallback(const ros::TimerEvent& /*event*/);
   void visCallback(const ros::TimerEvent& /*event*/);
 
@@ -49,18 +49,18 @@ private:
 
   SDFMap* map_;
   // may use ExactTime?
-  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, geometry_msgs::PoseStamped>
+  typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::Image, nav_msgs::Odometry>
       SyncPolicyImagePose;
   typedef shared_ptr<message_filters::Synchronizer<SyncPolicyImagePose>> SynchronizerImagePose;
   typedef message_filters::sync_policies::ApproximateTime<sensor_msgs::PointCloud2,
-                                                          geometry_msgs::PoseStamped>
+                                                          nav_msgs::Odometry>
       SyncPolicyCloudPose;
   typedef shared_ptr<message_filters::Synchronizer<SyncPolicyCloudPose>> SynchronizerCloudPose;
 
   ros::NodeHandle node_;
   shared_ptr<message_filters::Subscriber<sensor_msgs::Image>> depth_sub_;
   shared_ptr<message_filters::Subscriber<sensor_msgs::PointCloud2>> cloud_sub_;
-  shared_ptr<message_filters::Subscriber<geometry_msgs::PoseStamped>> pose_sub_;
+  shared_ptr<message_filters::Subscriber<nav_msgs::Odometry>> pose_sub_;
   SynchronizerImagePose sync_image_pose_;
   SynchronizerCloudPose sync_cloud_pose_;
 

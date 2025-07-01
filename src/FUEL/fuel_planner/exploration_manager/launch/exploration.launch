@@ -9,7 +9,7 @@
   <arg name="init_z" value="1.0"/> 
 
   <!-- topic of your odometry such as VIO or LIO -->
-  <arg name="odom_topic" value="/state_ukf/odom" />
+  <arg name="odom_topic" value="/mavros/local_position/odom" />
 
   <!-- main algorithm params -->
   <include file="$(find exploration_manager)/launch/algorithm.xml">
@@ -18,21 +18,21 @@
     <arg name="map_size_y_" value="$(arg map_size_y)"/>
     <arg name="map_size_z_" value="$(arg map_size_z)"/>
 
-    <arg name="box_min_x" value="-10.0"/>
-    <arg name="box_min_y" value="-15.0"/>
-    <arg name="box_min_z" value=" 0.0"/>
-    <arg name="box_max_x" value="10.0"/>
-    <arg name="box_max_y" value="15.0"/>
+    <arg name="box_min_x" value="-25.0"/>
+    <arg name="box_min_y" value="-25.0"/>
+    <arg name="box_min_z" value=" -0.8"/>
+    <arg name="box_max_x" value="25.0"/>
+    <arg name="box_max_y" value="25.0"/>
     <arg name="box_max_z" value=" 2.0"/>
 
     <arg name="odometry_topic" value="$(arg odom_topic)"/>
     <!-- sensor pose: transform of camera frame in the world frame -->
-    <arg name="sensor_pose_topic" value="/pcl_render_node/sensor_pose"/>
+    <arg name="sensor_pose_topic" value="/mavros/local_position/odom"/>
     <!-- depth topic: depth image, 640x480 by default -->
     <!-- cloud topic: point cloud measurement  -->
     <!-- subscribe ONLY TO ONE of the two topics -->
-    <arg name="depth_topic" value="/pcl_render_node/depth"/>
-    <arg name="cloud_topic" value="/pcl_render_node/cloud"/>
+    <arg name="depth_topic" value="/iris/realsense/depth_camera/depth/image_raw"/>
+    <arg name="cloud_topic" value="nouse1"/>
 
     <!-- intrinsic params of the depth camera -->
     <arg name="cx" value="321.04638671875"/>
@@ -41,7 +41,7 @@
     <arg name="fy" value="387.229248046875"/>
 
     <!-- maximum velocity and acceleration the drone will reach -->
-    <arg name="max_vel" value="2.0" />
+    <arg name="max_vel" value="1" />
     <arg name="max_acc" value="2.0" />
   </include>
 
@@ -73,7 +73,7 @@
   </node>
 
   <!-- use simulator -->
-  <include file="$(find exploration_manager)/launch/simulator.xml">
+  <!-- <include file="$(find exploration_manager)/launch/simulator.xml">
     <arg name="map_size_x_" value="$(arg map_size_x)"/>
     <arg name="map_size_y_" value="$(arg map_size_y)"/>
     <arg name="map_size_z_" value="$(arg map_size_z)"/>
@@ -85,6 +85,9 @@
     <arg name="odometry_topic" value="$(arg odom_topic)" />
     <arg name="c_num" value="0"/>
     <arg name="p_num" value="130"/>
-  </include>
+  </include> -->
+
+  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find plan_manage)/config/traj.rviz" />
+  <node pkg="tf" type="static_transform_publisher" name="tf_53" args="0 0 0 0 0 0 world navigation 100" />
 
 </launch>
