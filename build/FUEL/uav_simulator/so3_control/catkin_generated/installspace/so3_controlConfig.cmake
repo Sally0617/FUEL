@@ -67,14 +67,14 @@ set(so3_control_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(so3_control_SOURCE_PREFIX /home/nrc/FUEL/src/FUEL/uav_simulator/so3_control)
-  set(so3_control_DEVEL_PREFIX /home/nrc/FUEL/devel)
+  set(so3_control_SOURCE_PREFIX /home/xz/FUEL/src/FUEL/uav_simulator/so3_control)
+  set(so3_control_DEVEL_PREFIX /home/xz/FUEL/devel)
   set(so3_control_INSTALL_PREFIX "")
   set(so3_control_PREFIX ${so3_control_DEVEL_PREFIX})
 else()
   set(so3_control_SOURCE_PREFIX "")
   set(so3_control_DEVEL_PREFIX "")
-  set(so3_control_INSTALL_PREFIX /home/nrc/FUEL/install)
+  set(so3_control_INSTALL_PREFIX /home/xz/FUEL/install)
   set(so3_control_PREFIX ${so3_control_INSTALL_PREFIX})
 endif()
 
@@ -118,7 +118,7 @@ endif()
 
 set(libraries "")
 foreach(library ${libraries})
-  # keep build configuration keywords, target names and absolute libraries as-is
+  # keep build configuration keywords, generator expressions, target names, and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
     list(APPEND so3_control_LIBRARIES ${library})
   elseif(${library} MATCHES "^-l")
@@ -146,6 +146,8 @@ foreach(library ${libraries})
       target_link_options("${interface_target_name}" INTERFACE "${library}")
     endif()
     list(APPEND so3_control_LIBRARIES "${interface_target_name}")
+  elseif(${library} MATCHES "^\\$<")
+    list(APPEND so3_control_LIBRARIES ${library})
   elseif(TARGET ${library})
     list(APPEND so3_control_LIBRARIES ${library})
   elseif(IS_ABSOLUTE ${library})
@@ -154,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/nrc/FUEL/install/lib;/home/nrc/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/xz/FUEL/install/lib;/home/xz/mavros_catkin_ws/devel/lib;/home/xz/fast_lio/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +213,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(so3_control_LIBRARIES ${so3_control_LIBRARIES})
 
   _list_append_unique(so3_control_LIBRARY_DIRS ${${so3_control_dep}_LIBRARY_DIRS})
-  list(APPEND so3_control_EXPORTED_TARGETS ${${so3_control_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(so3_control_EXPORTED_TARGETS ${${so3_control_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

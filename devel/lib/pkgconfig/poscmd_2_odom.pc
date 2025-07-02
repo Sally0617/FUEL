@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/devel
+prefix=/home/xz/FUEL/devel
 
 Name: poscmd_2_odom
 Description: Description of poscmd_2_odom

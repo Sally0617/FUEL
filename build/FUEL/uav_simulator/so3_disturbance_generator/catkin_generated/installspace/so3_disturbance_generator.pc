@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: so3_disturbance_generator
 Description: Description of so3_disturbance_generator

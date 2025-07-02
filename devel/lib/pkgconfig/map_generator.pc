@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/devel
+prefix=/home/xz/FUEL/devel
 
 Name: map_generator
 Description: Description of map_generator

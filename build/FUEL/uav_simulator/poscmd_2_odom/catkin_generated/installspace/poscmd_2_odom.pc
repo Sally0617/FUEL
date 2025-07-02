@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: poscmd_2_odom
 Description: Description of poscmd_2_odom

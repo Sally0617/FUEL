@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: waypoint_generator
 Description: Description of waypoint_generator

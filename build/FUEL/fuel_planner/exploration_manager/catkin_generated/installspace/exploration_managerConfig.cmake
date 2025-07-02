@@ -67,14 +67,14 @@ set(exploration_manager_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(exploration_manager_SOURCE_PREFIX /home/nrc/FUEL/src/FUEL/fuel_planner/exploration_manager)
-  set(exploration_manager_DEVEL_PREFIX /home/nrc/FUEL/devel)
+  set(exploration_manager_SOURCE_PREFIX /home/xz/FUEL/src/FUEL/fuel_planner/exploration_manager)
+  set(exploration_manager_DEVEL_PREFIX /home/xz/FUEL/devel)
   set(exploration_manager_INSTALL_PREFIX "")
   set(exploration_manager_PREFIX ${exploration_manager_DEVEL_PREFIX})
 else()
   set(exploration_manager_SOURCE_PREFIX "")
   set(exploration_manager_DEVEL_PREFIX "")
-  set(exploration_manager_INSTALL_PREFIX /home/nrc/FUEL/install)
+  set(exploration_manager_INSTALL_PREFIX /home/xz/FUEL/install)
   set(exploration_manager_PREFIX ${exploration_manager_INSTALL_PREFIX})
 endif()
 
@@ -118,7 +118,7 @@ endif()
 
 set(libraries "exploration_manager")
 foreach(library ${libraries})
-  # keep build configuration keywords, target names and absolute libraries as-is
+  # keep build configuration keywords, generator expressions, target names, and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
     list(APPEND exploration_manager_LIBRARIES ${library})
   elseif(${library} MATCHES "^-l")
@@ -146,6 +146,8 @@ foreach(library ${libraries})
       target_link_options("${interface_target_name}" INTERFACE "${library}")
     endif()
     list(APPEND exploration_manager_LIBRARIES "${interface_target_name}")
+  elseif(${library} MATCHES "^\\$<")
+    list(APPEND exploration_manager_LIBRARIES ${library})
   elseif(TARGET ${library})
     list(APPEND exploration_manager_LIBRARIES ${library})
   elseif(IS_ABSOLUTE ${library})
@@ -154,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/nrc/FUEL/install/lib;/home/nrc/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/xz/FUEL/install/lib;/home/xz/mavros_catkin_ws/devel/lib;/home/xz/fast_lio/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +213,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(exploration_manager_LIBRARIES ${exploration_manager_LIBRARIES})
 
   _list_append_unique(exploration_manager_LIBRARY_DIRS ${${exploration_manager_dep}_LIBRARY_DIRS})
-  list(APPEND exploration_manager_EXPORTED_TARGETS ${${exploration_manager_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(exploration_manager_EXPORTED_TARGETS ${${exploration_manager_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: path_searching
 Description: Description of path_searching

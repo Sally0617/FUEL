@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: poly_traj
 Description: Description of poly_traj

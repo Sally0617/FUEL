@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/devel
+prefix=/home/xz/FUEL/devel
 
 Name: cmake_utils
 Description: Description of cmake_utils

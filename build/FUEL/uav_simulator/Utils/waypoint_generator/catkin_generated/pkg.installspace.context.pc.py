@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "waypoint_generator"
-PROJECT_SPACE_DIR = "/home/nrc/FUEL/install"
+PROJECT_SPACE_DIR = "/home/xz/FUEL/install"
 PROJECT_VERSION = "0.0.0"

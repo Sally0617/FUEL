@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/devel
+prefix=/home/xz/FUEL/devel
 
 Name: odom_visualization
 Description: Description of odom_visualization

@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/devel
+prefix=/home/xz/FUEL/devel
 
 Name: rviz_plugins
 Description: Description of rviz_plugins

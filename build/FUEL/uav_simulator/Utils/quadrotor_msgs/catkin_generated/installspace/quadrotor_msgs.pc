@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: quadrotor_msgs
 Description: Description of quadrotor_msgs

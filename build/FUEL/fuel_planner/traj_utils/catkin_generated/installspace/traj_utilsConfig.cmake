@@ -67,14 +67,14 @@ set(traj_utils_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(traj_utils_SOURCE_PREFIX /home/nrc/FUEL/src/FUEL/fuel_planner/traj_utils)
-  set(traj_utils_DEVEL_PREFIX /home/nrc/FUEL/devel)
+  set(traj_utils_SOURCE_PREFIX /home/xz/FUEL/src/FUEL/fuel_planner/traj_utils)
+  set(traj_utils_DEVEL_PREFIX /home/xz/FUEL/devel)
   set(traj_utils_INSTALL_PREFIX "")
   set(traj_utils_PREFIX ${traj_utils_DEVEL_PREFIX})
 else()
   set(traj_utils_SOURCE_PREFIX "")
   set(traj_utils_DEVEL_PREFIX "")
-  set(traj_utils_INSTALL_PREFIX /home/nrc/FUEL/install)
+  set(traj_utils_INSTALL_PREFIX /home/xz/FUEL/install)
   set(traj_utils_PREFIX ${traj_utils_INSTALL_PREFIX})
 endif()
 
@@ -118,7 +118,7 @@ endif()
 
 set(libraries "traj_utils")
 foreach(library ${libraries})
-  # keep build configuration keywords, target names and absolute libraries as-is
+  # keep build configuration keywords, generator expressions, target names, and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
     list(APPEND traj_utils_LIBRARIES ${library})
   elseif(${library} MATCHES "^-l")
@@ -146,6 +146,8 @@ foreach(library ${libraries})
       target_link_options("${interface_target_name}" INTERFACE "${library}")
     endif()
     list(APPEND traj_utils_LIBRARIES "${interface_target_name}")
+  elseif(${library} MATCHES "^\\$<")
+    list(APPEND traj_utils_LIBRARIES ${library})
   elseif(TARGET ${library})
     list(APPEND traj_utils_LIBRARIES ${library})
   elseif(IS_ABSOLUTE ${library})
@@ -154,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/nrc/FUEL/install/lib;/home/nrc/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/xz/FUEL/install/lib;/home/xz/mavros_catkin_ws/devel/lib;/home/xz/fast_lio/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +213,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(traj_utils_LIBRARIES ${traj_utils_LIBRARIES})
 
   _list_append_unique(traj_utils_LIBRARY_DIRS ${${traj_utils_dep}_LIBRARY_DIRS})
-  list(APPEND traj_utils_EXPORTED_TARGETS ${${traj_utils_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(traj_utils_EXPORTED_TARGETS ${${traj_utils_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "")

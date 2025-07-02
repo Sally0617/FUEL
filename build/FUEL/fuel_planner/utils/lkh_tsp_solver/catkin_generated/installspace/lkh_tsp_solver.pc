@@ -1,4 +1,4 @@
-prefix=/home/nrc/FUEL/install
+prefix=/home/xz/FUEL/install
 
 Name: lkh_tsp_solver
 Description: Description of lkh_tsp_solver

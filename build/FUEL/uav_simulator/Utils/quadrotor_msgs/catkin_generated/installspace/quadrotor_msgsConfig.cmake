@@ -67,14 +67,14 @@ set(quadrotor_msgs_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(quadrotor_msgs_SOURCE_PREFIX /home/nrc/FUEL/src/FUEL/uav_simulator/Utils/quadrotor_msgs)
-  set(quadrotor_msgs_DEVEL_PREFIX /home/nrc/FUEL/devel)
+  set(quadrotor_msgs_SOURCE_PREFIX /home/xz/FUEL/src/FUEL/uav_simulator/Utils/quadrotor_msgs)
+  set(quadrotor_msgs_DEVEL_PREFIX /home/xz/FUEL/devel)
   set(quadrotor_msgs_INSTALL_PREFIX "")
   set(quadrotor_msgs_PREFIX ${quadrotor_msgs_DEVEL_PREFIX})
 else()
   set(quadrotor_msgs_SOURCE_PREFIX "")
   set(quadrotor_msgs_DEVEL_PREFIX "")
-  set(quadrotor_msgs_INSTALL_PREFIX /home/nrc/FUEL/install)
+  set(quadrotor_msgs_INSTALL_PREFIX /home/xz/FUEL/install)
   set(quadrotor_msgs_PREFIX ${quadrotor_msgs_INSTALL_PREFIX})
 endif()
 
@@ -118,7 +118,7 @@ endif()
 
 set(libraries "encode_msgs;decode_msgs")
 foreach(library ${libraries})
-  # keep build configuration keywords, target names and absolute libraries as-is
+  # keep build configuration keywords, generator expressions, target names, and absolute libraries as-is
   if("${library}" MATCHES "^(debug|optimized|general)$")
     list(APPEND quadrotor_msgs_LIBRARIES ${library})
   elseif(${library} MATCHES "^-l")
@@ -146,6 +146,8 @@ foreach(library ${libraries})
       target_link_options("${interface_target_name}" INTERFACE "${library}")
     endif()
     list(APPEND quadrotor_msgs_LIBRARIES "${interface_target_name}")
+  elseif(${library} MATCHES "^\\$<")
+    list(APPEND quadrotor_msgs_LIBRARIES ${library})
   elseif(TARGET ${library})
     list(APPEND quadrotor_msgs_LIBRARIES ${library})
   elseif(IS_ABSOLUTE ${library})
@@ -154,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/nrc/FUEL/install/lib;/home/nrc/catkin_ws/devel/lib;/opt/ros/melodic/lib)
+    foreach(path /home/xz/FUEL/install/lib;/home/xz/mavros_catkin_ws/devel/lib;/home/xz/fast_lio/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -211,7 +213,7 @@ foreach(depend ${depends})
   _unpack_libraries_with_build_configuration(quadrotor_msgs_LIBRARIES ${quadrotor_msgs_LIBRARIES})
 
   _list_append_unique(quadrotor_msgs_LIBRARY_DIRS ${${quadrotor_msgs_dep}_LIBRARY_DIRS})
-  list(APPEND quadrotor_msgs_EXPORTED_TARGETS ${${quadrotor_msgs_dep}_EXPORTED_TARGETS})
+  _list_append_deduplicate(quadrotor_msgs_EXPORTED_TARGETS ${${quadrotor_msgs_dep}_EXPORTED_TARGETS})
 endforeach()
 
 set(pkg_cfg_extras "quadrotor_msgs-msg-extras.cmake")
